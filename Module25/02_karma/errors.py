@@ -1,23 +1,23 @@
 class KillError(Exception):
-    def __str__(self):
-        return 'Убийство'
+    def __init__(self):
+        super().__init__('Убийство')
 
 
 class DrunkError(Exception):
-    def __str__(self):
-        return 'Пьянство'
+    def __init__(self):
+        super().__init__('Пьянство')
 
 
 class CarCrashError(Exception):
-    def __str__(self):
-        return 'ДТП'
+    def __init__(self):
+        super().__init__('ДТП')
 
 
 class GluttonyError(Exception):
-    def __str__(self):
-        return 'Обжорство'
+    def __init__(self):
+        super().__init__('Обжорство')
 
 
 class DepressionError(Exception):
-    def __str__(self):
-        return 'Уныние'
+    def __init__(self):
+        super().__init__('Уныние')
