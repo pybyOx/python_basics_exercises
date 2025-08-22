@@ -3,7 +3,7 @@ from typing import Union
 
 class MyMath:
     """Базовый класс, выполняющий математические вычисления, связанные с фигурами."""
-    @classmethod
+    @staticmethod
     def circle_len(cls, radius: Union[int, float]) -> Union[int, float]:
         """Метод, вычисляющий длину окружности.
         Args:
@@ -13,7 +13,7 @@ class MyMath:
         """
         return 2 * 3.14 * radius
 
-    @classmethod
+    @staticmethod
     def circle_sq(cls, radius: Union[int, float]) -> Union[int, float]:
         """Метод, вычисляющий площадь окружности.
         Args:
@@ -23,7 +23,7 @@ class MyMath:
         """
         return 3.14 * radius ** 2
 
-    @classmethod
+    @staticmethod
     def cube_volume(cls, edge: Union[int, float]) -> Union[int, float]:
         """Метод, вычисляющий объем куба.
         Args:
@@ -33,7 +33,7 @@ class MyMath:
         """
         return edge ** 3
 
-    @classmethod
+    @staticmethod
     def sphere_surface_sq(cls, radius: Union[int, float]) -> Union[int, float]:
         """Метод, вычисляющий площадь поверхности сферы.
         Args:
