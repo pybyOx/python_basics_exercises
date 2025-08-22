@@ -1,10 +1,24 @@
-# TODO здесь писать код
+from os import path
+
+
+def error_log_generator(path: str) -> str:
+    """Функция-генератор поиска ошибок в файле
+    :arg path(str) - принимает путь к файлу
+    :return Iterable(str) - возвращает строки с ошибками
+    """
+    with open(path, 'r', encoding='utf-8') as file:
+        for string in file:
+            if 'ERROR' in string:
+                yield string
+    return
 
 
 # При помощи модуля os (и функции join) сформируйте пути до файлов work_logs.txt и output.txt в папке data
 # (output.txt может не быть в папке data, но его нужно будет там создать, при помощи кода)
-input_file_path = ...
-output_file_path = ...
+
+input_file_path = path.abspath(path.join('data', 'work_logs.txt'))
+output_file_path = path.abspath(path.join('data', 'output.txt'))
+
 # Документация по join https://docs-python.ru/standart-library/modul-os-path-python/funktsija-join-modulja-os-path/
 
 # Не забудьте проверить наличие файлов перед тем как начать работу с ними
