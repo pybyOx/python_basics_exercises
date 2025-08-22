@@ -26,3 +26,11 @@ def decorated_function(text: str, num: int) -> None:
 
 
 decorated_function("Юзер", 101)
+
+# Когда Python встречает @decorated_decorator(100, 'рублей', 200, 'друзей'), сначала эти аргументы передаются
+# в decorator_with_args_for_any_decorator, а затем в decorated_decorator. Это параметры самого декоратора, они
+# попадают в args и kwargs.
+# Когда же вызывается decorated_function("Юзер", 101), аргументы передаются уже внутрь
+# wrapper, и там они оказываются в args2 и kwargs2.
+# Разделение происходит автоматически: сначала передаёте параметры декоратору, потом отдельно аргументы функции.
+# Python просто обрабатывает их на разных уровнях вложенности.
