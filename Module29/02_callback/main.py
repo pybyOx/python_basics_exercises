@@ -7,6 +7,8 @@ def callback(path: str) -> Callable:
     """Декоратор для регистрации функции обратного вызова по указанному маршруту."""
     def decorator(func: Callable) -> Callable:
         callbacks[path] = func  # Если эту строку переместить в wrapped, ничего не получается. Почему?
+        # Потому что wrapped вызывается только при выполнении самой функции, а регистрация функции
+        # в словарь callback должна происходить на этапе декорирования, то есть когда Python листит @callback('//')
 
         def wrapped(*args, **kwargs):
             value = func(*args, **kwargs)
@@ -28,6 +30,3 @@ if route:
     print('Ответ:', response)
 else:
     print('Такого пути нет')
-
-# Как решить задачу с исходным кодом route = app.get('//') я не поняла.
-# Гугл выдает что-то про Flask, я не смогла разобраться с этим
