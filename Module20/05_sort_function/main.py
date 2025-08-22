@@ -1,9 +1,8 @@
 def tpl_sort(my_tpl):
-    for i in my_tpl:
-        if not isinstance(i, int):
-            return my_tpl
-        else:
-            return sorted(my_tpl)
+    if not all(isinstance(element, int) for element in my_tpl):
+        return my_tpl
+    else:
+        return sorted(my_tpl)
 
 # альтернативное решение
 # def tpl_sort(my_tpl):
