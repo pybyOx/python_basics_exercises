@@ -3,9 +3,10 @@ def create_dictionary():
     dictionary_pair = dict()
     for digit in range(count_pair):
         print('{}-я пара:'.format(digit + 1))
-        synonym_1 = input('Введите слово: ').title()
-        synonym_2 = input('Введите синоним к этому слову: ').title()
-        dictionary_pair[synonym_1] = synonym_2
+        first_word, second_word = input('Слово: ').title(), input('Cиноним: ').title()
+        dictionary_pair[first_word] = second_word
+        dictionary_pair[second_word] = first_word
+
     return dictionary_pair
 
 
@@ -14,12 +15,6 @@ def check_dictionary(dictionary):
         user_word = input('\nВведите слово: ').title()
         if user_word in dictionary.keys():
             print('Синоним: {}'.format(dictionary.get(user_word)))
-            break
-        elif user_word in dictionary.values():
-            for key in dictionary.keys():
-                if dictionary[key] == user_word:
-                    print('Синоним: {}'.format(key))
-                    break
             break
         else:
             print('Такого слова в словаре нет.')

@@ -3,15 +3,16 @@ def create_dictionary():
     buyers_dictionary = dict()
 
     for digit in range(order_count):
-        print('{}-й заказ: '.format(digit + 1), end='')
-        order_list = input('(Покупатель Название_пиццы Количество_заказанных_пицц)\n').title().split()
-        if order_list[0] not in buyers_dictionary.keys():
-            buyers_dictionary[order_list[0]] = {order_list[1]: int(order_list[2])}
+        print('\n{}-й заказ: '.format(digit + 1), end='')
+        customer_name, pizza_name, pizza_quantity = input('(Покупатель Название_пиццы Количество_заказанных_пицц)\n').title().split()
+        pizza_quantity = int(pizza_quantity)
+        if customer_name not in buyers_dictionary.keys():
+            buyers_dictionary[customer_name] = {pizza_name: pizza_quantity}
         else:
-            if order_list[1] in buyers_dictionary[order_list[0]].keys():
-                buyers_dictionary[order_list[0]][order_list[1]] += int(order_list[2])
+            if pizza_name in buyers_dictionary[customer_name].keys():
+                buyers_dictionary[customer_name][pizza_name] += pizza_quantity
             else:
-                buyers_dictionary[order_list[0]][order_list[1]] = int(order_list[2])
+                buyers_dictionary[customer_name][pizza_name] = pizza_quantity
 
     return buyers_dictionary
 
