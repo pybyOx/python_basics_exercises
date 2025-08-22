@@ -1,5 +1,41 @@
-# TODO здесь писать код
+from math import pi
+from abc import ABC, abstractmethod
 
+
+class Shape(ABC):
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def area(self):
+        pass
+
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return pi * self.radius ** 2
+
+
+class Rectangle(Shape):
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+
+    def area(self):
+        return self.length * self.width
+
+
+class Triangle(Shape):
+    def __init__(self, base, height):
+        self.base = base
+        self.height = height
+
+    def area(self):
+        return 0.5 * self.base * self.height
 
 
 # Примеры работы с классом:
@@ -14,6 +50,6 @@ rectangle_area = rectangle.area()
 triangle_area = triangle.area()
 
 # Вывод результатов
-print("Площадь круга:", circle_area)
+print("Площадь круга:", round(circle_area, 2))
 print("Площадь прямоугольника:", rectangle_area)
 print("Площадь треугольника:", triangle_area)

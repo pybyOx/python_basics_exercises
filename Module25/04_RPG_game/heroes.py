@@ -1,27 +1,13 @@
-import random
-
-
 class Hero:
-    # Базовый класс, который не подлежит изменению
-    # У каждого наследника будут атрибуты:
-    # - Имя
-    # - Здоровье
-    # - Сила
-    # - Жив ли объект
-    # Каждый наследник будет уметь:
-    # - Атаковать
-    # - Получать урон
-    # - Выбирать действие для выполнения
-    # - Описывать своё состояние
 
     max_hp = 150
     start_power = 10
 
     def __init__(self, name):
-        self.name = name
-        self.__hp = self.max_hp
-        self.__power = self.start_power
-        self.__is_alive = True
+        self.name = name                        # - Имя
+        self.__hp = self.max_hp                 # - Здоровье
+        self.__power = self.start_power         # - Сила
+        self.__is_alive = True                  # - Жив ли объект
 
     def get_hp(self):
         return self.__hp
@@ -38,68 +24,175 @@ class Hero:
     def is_alive(self):
         return self.__is_alive
 
-    # Все наследники должны будут переопределять каждый метод базового класса (кроме геттеров/сеттеров)
-    # Переопределенные методы должны вызывать методы базового класса (при помощи super).
-    # Методы attack и __str__ базового класса можно не вызывать (т.к. в них нету кода).
-    # Они нужны исключительно для наглядности.
-    # Метод make_a_move базового класса могут вызывать только герои, не монстры.
-    def attack(self, target):
-        # Каждый наследник будет наносить урон согласно правилам своего класса
+    def attack(self, target):  # - Атаковать
         raise NotImplementedError("Вы забыли переопределить метод Attack!")
 
-    def take_damage(self, damage):
-        # Каждый наследник будет получать урон согласно правилам своего класса
-        # При этом у всех наследников есть общая логика, которая определяет жив ли объект.
-        print("\t", self.name, "Получил удар с силой равной = ", round(damage), ". Осталось здоровья - ", round(self.get_hp()))
-        # Дополнительные принты помогут вам внимательнее следить за боем и изменять стратегию, чтобы улучшить выживаемость героев
+    def take_damage(self, damage):  # - Получить урон
+        print("\t{} получил удар с силой равной = {}. Осталось здоровья - {}.".format(
+            self.name, round(damage), round(self.get_hp())))
         if self.get_hp() <= 0:
             self.__is_alive = False
 
-    def make_a_move(self, friends, enemies):
-        # С каждым днём герои становятся всё сильнее.
-        self.set_power(self.get_power() + 0.1)
+    def make_a_move(self, friends, enemies):  # make_a_move базового класса могут вызывать только герои, не монстры.
+        self.set_power(self.get_power() + 0.1)  # С каждым днём герои становятся всё сильнее.
 
-    def __str__(self):
-        # Каждый наследник должен выводить информацию о своём состоянии, чтобы вы могли отслеживать ход сражения
+    def __str__(self):  # - Описать своё состояние
         raise NotImplementedError("Вы забыли переопределить метод __str__!")
 
 
-class Healer(Hero):
-    # Целитель:
-    # Атрибуты:
-    # - магическая сила - равна значению НАЧАЛЬНОГО показателя силы умноженному на 3 (self.__power * 3)
-    # Методы:
-    # - атака - может атаковать врага, но атакует только в половину силы self.__power
-    # - получение урона - т.к. защита целителя слаба - он получает на 20% больше урона (1.2 * damage)
-    # - исцеление - увеличивает здоровье цели на величину равную своей магической силе
-    # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из действий (атака,
-    # исцеление) на выбранную им цель
+class Healer(Hero):  # Целитель:
+    def __init__(self, name):
+        super().__init__(name)
+        self.__magic_power = self.get_power() * 3      # - магическая сила
+
+    def __str__(self):
+        return ('{name} | HP : {hp} | Сила : {power}'
+                ' | Магия : {magic}').format(name=self.name, hp=round(self.get_hp()), power=round(self.get_power()),
+                                             magic=self.get_magic_power())
+
+    def get_magic_power(self):
+        return self.__magic_power
+
+    def set_magic_power(self, new_value):
+        self.__magic_power = new_value
+
+    def attack(self, target):  # - атака - может атаковать врага, но атакует только в половину силы self.__power
+        target.take_damage(self.get_power() / 2)
+
+    def take_damage(self, damage):
+        damage *= 1.2  # получает на 20% больше урона (1.2 * damage)
+        self.set_hp(self.get_hp() - damage)
+        super().take_damage(damage)
+
+    def healing(self, target):  # - исцеление - увеличивает здоровье цели на величину равную своей магической силе
+        print("Исцеляю", target.name)
+        target.set_hp(target.get_hp() + self.get_magic_power())
+
+    def make_a_move(self, friends, enemies):  # - выбор действия - (атака, исцеление)
+        super().make_a_move(friends, enemies)
+        print(self.name, end=' :')
+        target_of_healing = friends[0]
+        min_health = target_of_healing.get_hp()
+        for friend in friends:
+            if friend.get_hp() < min_health:
+                target_of_healing = friend
+                min_health = target_of_healing.get_hp()
+        if min_health <= 120:
+            self.healing(target_of_healing)
+        else:
+            if not enemies:
+                return
+            print("Атакую ближнего -", enemies[0].name)
+            self.attack(enemies[0])
 
 
-class Tank(Hero):
-    # Танк:
-    # Атрибуты:
-    # - показатель защиты - изначально равен 1, может увеличиваться и уменьшаться
-    # - поднят ли щит - танк может поднимать щит, этот атрибут должен показывать поднят ли щит в данный момент
-    # Методы:
-    # - атака - атакует, но т.к. доспехи очень тяжелые - наносит половину урона (self.__power)
-    # - получение урона - весь входящий урон делится на показатель защиты (damage/self.defense) и только потом отнимается от здоровья
-    # - поднять щит - если щит не поднят - поднимает щит. Это увеличивает показатель брони в 2 раза, но уменьшает показатель силы в 2 раза.
-    # - опустить щит - если щит поднят - опускает щит. Это уменьшает показатель брони в 2 раза, но увеличивает показатель силы в 2 раза.
-    # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из действий (атака,
-    # поднять щит/опустить щит) на выбранную им цель
+class Tank(Hero):  # Танк:
+    def __init__(self, name):
+        super().__init__(name)
+        self.__defense = 1              # - показатель защиты
+        self.__shield = False          # - поднят ли щит
+
+    def __str__(self):
+        return ('{name} | HP : {hp} | Сила : {power}'
+                ' | Защита : {defense} | Щит : {shield}').format(name=self.name, hp=round(self.get_hp()),
+                                                                 power=round(self.get_power()),
+                                                                 defense=self.get_defense(), shield=self.get_shield())
+
+    def get_defense(self):
+        return self.__defense
+
+    def set_defence(self, new_value):
+        self.__defense = new_value
+
+    def get_shield(self):
+        return self.__shield
+
+    def set_shield(self, new_value):
+        self.__shield = new_value
+
+    def attack(self, target):  # - атака - наносит половину урона (self.__power)
+        target.take_damage(self.get_power() / 2)
+
+    def take_damage(self, damage):
+        damage = damage / self.__defense  # - входящий урон делится на показатель защиты
+        self.set_hp(self.get_hp() - damage)
+        super().take_damage(damage)
+
+    def on_shield(self):  # - поднять щит - увеличивает защиту в 2 раза, но уменьшает показатель силы в 2 раза.
+        print('Поднимаю щит.')
+        if self.get_shield() is False:
+            self.set_shield(True)
+            self.set_defence(self.get_defense() * 2)
+            self.set_power(self.get_power() / 2)
+
+    def off_shield(self):  # - опустить щит - уменьшает защиту в 2 раза, но увеличивает показатель силы в 2 раза.
+        print('Опускаю щит.')
+        if self.get_shield() is True:
+            self.set_shield(False)
+            self.set_defence(self.get_defense() / 2)
+            self.set_power(self.get_power() * 2)
+
+    def make_a_move(self, friends, enemies):  # - выбор действия - (атака, поднять щит/опустить щит)
+        super().make_a_move(friends, enemies)
+        print(self.name, end=' :')
+        if self.get_hp() < 60 and self.get_shield() is False:
+            self.on_shield()
+        elif self.get_hp() > 100 and self.get_shield() is True:
+            self.off_shield()
+        else:
+            if not enemies:
+                return
+            target_of_attack = enemies[0]
+            min_health = target_of_attack.get_hp()
+            for enemy in enemies:
+                if enemy.get_hp() < min_health:
+                    target_of_attack = enemy
+                    min_health = target_of_attack.get_hp()
+            print("Атакую врага с наименьшим HP -", target_of_attack.name)
+            self.attack(target_of_attack)
 
 
-class Attacker(Hero):
-    # Убийца:
-    # Атрибуты:
-    # - коэффициент усиления урона (входящего и исходящего)
-    # Методы:
-    # - атака - наносит урон равный показателю силы (self.__power) умноженному на коэффициент усиления урона (self.power_multiply)
-    # после нанесения урона - вызывается метод ослабления power_down.
-    # - получение урона - получает урон равный входящему урона умноженному на половину коэффициента усиления урона - damage * (
-    # self.power_multiply / 2)
-    # - усиление (power_up) - увеличивает коэффициента усиления урона в 2 раза
-    # - ослабление (power_down) - уменьшает коэффициента усиления урона в 2 раза
-    # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из действий (атака,
-    # усиление, ослабление) на выбранную им цель
+class Attacker(Hero):  # Убийца:
+    def __init__(self, name):
+        super().__init__(name)
+        self.__power_multiply = 2         # - коэффициент усиления урона (входящего и исходящего)
+
+    def __str__(self):
+        return ('{name} | HP : {hp} | Сила : {power}'
+                ' | Усиление урона : {multiply}').format(name=self.name, hp=round(self.get_hp()),
+                                                         power=round(self.get_power()),
+                                                         multiply=self.get_power_multiply())
+
+    def get_power_multiply(self):
+        return self.__power_multiply
+
+    def set_power_multiply(self, new_value):
+        self.__power_multiply = new_value
+
+    def attack(self, target):  # атака - наносит урон равный показателю силы, умноженному на коэффициент усиления урона
+        target.take_damage(self.get_power() * self.get_power_multiply())
+        self.power_down()
+
+    def take_damage(self, damage):  # - получение урона - damage * (self.power_multiply / 2)
+        damage = damage * (self.get_power_multiply() / 2)
+        self.set_hp(self.get_hp() - damage)
+        super().take_damage(damage)
+
+    def power_up(self):  # - усиление (power_up) - увеличивает коэффициента усиления урона в 2 раза
+        self.set_power_multiply(self.get_power_multiply() * 2)
+        print('Усиление: усиление урона = ', self.get_power_multiply())
+
+    def power_down(self):  # - ослабление (power_down) - уменьшает коэффициента усиления урона в 2 раза
+        self.set_power_multiply(self.get_power_multiply() / 2)
+        print('Ослабление: усиление урона = ', self.get_power_multiply())
+
+    def make_a_move(self, friends, enemies):  # - выбор действия - (атака, усиление, ослабление)
+        super().make_a_move(friends, enemies)
+        print(self.name, end=' :')
+        if self.get_power_multiply() < 2:
+            self.power_up()
+        else:
+            if not enemies:
+                return
+            print("Атакую того, кто стоит ближе -", enemies[0].name)
+            self.attack(enemies[0])
