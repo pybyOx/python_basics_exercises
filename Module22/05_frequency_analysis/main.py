@@ -5,10 +5,10 @@ def create_analysis_dictionary(alphabet='abcdefghijklmnopqrstuvwxyz'):
     symbols_list = [symbol for symbol in text_file.read().lower() if symbol in alphabet]
     text_file.close
 
-    for symbol in sorted(set(symbols_list)):
+    for symbol in set(symbols_list):
         analysis[symbol] = round(symbols_list.count(symbol) / len(symbols_list), 3)
 
-    return dict(sorted(analysis.items(), key=lambda i: i[1], reverse=True))
+    return dict(sorted(analysis.items(), key=lambda item: (-item[1], item[0])))
 
 
 def write_result(dictionary):
