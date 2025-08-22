@@ -41,20 +41,20 @@ class Monster:
         return 'Name: {0} | HP: {1}'.format(self.name, self.get_hp())
 
 
-class MonsterBerserk(Monster):
+class MonsterBerserk(Monster):  # Берсерк
 
     def __init__(self, name):
         super().__init__(name)
-        self.madness = 1
+        self.madness = 1          # ярость (max = 4)
 
-    def attack(self, target):
+    def attack(self, target):  # атака: сила * ярость
         target.take_damage(self.get_power() * self.madness)
         self.madness += 0.1
 
-    def take_damage(self, power):
+    def take_damage(self, power):  # получает урон * ярость/2
         self.set_hp(self.get_hp() - power * (self.madness / 2))
-        if self.get_hp() < 50:
-            self.madness *= 2
+        if self.get_hp() < 50:  # если хр < 50
+            self.madness *= 2  # ярость * 2
         super().take_damage(power)
 
     def make_a_move(self, friends, enemies):
@@ -79,13 +79,13 @@ class MonsterHunter(Monster):
         super().__init__(name)
         self.potions = 10
 
-    def attack(self, target):
+    def attack(self, target):  # чем меньше зелья, тем выше урон
         target.take_damage(self.get_power() + (10 - self.potions))
 
     def take_damage(self, power):
         self.set_hp(self.get_hp() - power)
         if random.randint(1, 10) == 1:
-            self.potions -= 1
+            self.potions -= 1  # уменьшается 1 к 10
         super().take_damage(power)
 
     def give_a_potion(self, target):
