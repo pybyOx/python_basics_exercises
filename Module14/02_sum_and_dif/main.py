@@ -18,7 +18,7 @@ def quantity_of_digits(numeric):
 
 while True:
     number = int(input('Введите целое положительное число: '))
-    if number <= 0 or number % 1 != 0:
+    if number <= 0:
         print('Ошибка ввода. Попробуйте еще раз')
         continue
     else:
