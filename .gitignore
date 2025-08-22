@@ -41,7 +41,7 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
-# MSTest test Results
+# MSTest ages.txt Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
@@ -401,7 +401,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit ages.txt / coverage reports
 htmlcov/
 .tox/
 .nox/
