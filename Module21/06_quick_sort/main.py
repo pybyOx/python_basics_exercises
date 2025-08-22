@@ -1,7 +1,15 @@
 def split_list(lst):
-    return ([elem for elem in lst if elem < lst[-1]],
-            [elem for elem in lst if elem == lst[-1]],
-            [elem for elem in lst if elem > lst[-1]])
+    less_lst, equals_lst, more_lst = [], [], []
+    pivot = lst[-1]
+    for digit in lst:
+        if digit < pivot:
+            less_lst.append(digit)
+        elif digit == pivot:
+            equals_lst.append(digit)
+        else:
+            more_lst.append(digit)
+
+    return less_lst, equals_lst, more_lst
 
 
 def qsort(my_list):
