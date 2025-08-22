@@ -1,4 +1,39 @@
-# TODO здесь писать код
+import functools
+import time
+from typing import Callable, Any
+
+
+class LoggerDecorator:
+    """
+    Декоратор класса для логирования вызовов функций и времени их выполнения.
+
+    Этот декоратор оборачивает функцию и логирует информацию о ее вызове,
+    аргументах, времени выполнения и результате.
+    """
+    def __init__(self, func: Callable[..., Any]) -> None:
+        """Инициализирует декоратор.
+        Args:
+            func: Функция, которую нужно декорировать.
+        """
+        functools.update_wrapper(self, func)
+        self.func = func
+
+    def __call__(self, *args, **kwargs) -> Any:
+        """
+        Вызывается при каждом вызове декорированной функции.
+        Args:
+            *args: Позиционные аргументы, переданные в функцию.
+            **kwargs: Именованные аргументы, переданные в функцию.
+        Returns:
+            Результат вызова декорированной функции.
+        """
+        print('\n\tВызов функции {}\n{}\nАргументы: {},{}'.format(self.func.__name__, '_' * 40, args, kwargs))
+        start_time = time.time()
+        value = self.func(*args, **kwargs)
+        end_time = time.time()
+        print('Результат: {}\nВремя выполнения функции {} сек'.format(
+            value, round(end_time - start_time, 3)))
+        return value
 
 
 @LoggerDecorator
