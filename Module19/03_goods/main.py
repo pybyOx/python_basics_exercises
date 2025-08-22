@@ -1,3 +1,18 @@
+def counting_goods_and_prices(my_list):
+    quantity = 0
+    total_price = 0
+    for slot in my_list:
+        quantity += slot.get('quantity')
+        total_price += slot.get('price') * slot.get('quantity')
+
+    return quantity, total_price
+
+
+def calculation(name, code, storage):
+    quantity, total_price = counting_goods_and_prices(storage.get(code))
+    print('{} - {} штук, стоимость {} руб.'.format(name, quantity, total_price))
+
+
 goods = {
     'Лампа': '12345',
     'Стол': '23456',
@@ -24,4 +39,5 @@ store = {
     ],
 }
 
-# TODO здесь писать код
+for product in goods.keys():
+    calculation(product, goods.get(product), store)
