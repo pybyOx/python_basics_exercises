@@ -1,27 +1,28 @@
+
 def create_dictionary():
-    order_count = int(input('Введите количество заказов: '))
     buyers_dictionary = dict()
 
-    for digit in range(order_count):
-        print('\n{}-й заказ: '.format(digit + 1), end='')
-        customer_name, pizza_name, pizza_quantity = input('(Покупатель Название_пиццы Количество_заказанных_пицц)\n').title().split()
-        pizza_quantity = int(pizza_quantity)
-        if customer_name not in buyers_dictionary.keys():
-            buyers_dictionary[customer_name] = {pizza_name: pizza_quantity}
-        else:
-            if pizza_name in buyers_dictionary[customer_name].keys():
-                buyers_dictionary[customer_name][pizza_name] += pizza_quantity
-            else:
-                buyers_dictionary[customer_name][pizza_name] = pizza_quantity
+    for i in range(int(input('Введите количество заказов: '))):
+        while True:
+            order = input(f'{i + 1}-й заказ: ').title().split()
+            if len(order) == 3:
+                customer_name, pizza_name, pizza_quantity = order
+                if pizza_quantity.isdigit():
+                    cust_dict = buyers_dictionary.setdefault(customer_name, {})
+                    cust_dict[pizza_name] = cust_dict.get(pizza_name, 0) + int(pizza_quantity)
+                    break
+            print('Некорректный ввод. '
+                  '\nНеобходимо ввести заказ в виде:'
+                  '\n<Покупатель> <Название пиццы> <Количество заказанных пицц>')
 
     return buyers_dictionary
 
 
 def output(my_dictionary):
-    for name in my_dictionary.keys():
-        print('\n{}:'.format(name))
-        for pizza in my_dictionary[name].keys():
-            print('{} - {} шт.'.format(pizza, my_dictionary[name][pizza]))
+    for name in sorted(my_dictionary):  
+        print(f'{name}:')
+        for pizza in sorted(my_dictionary[name]):  # сортировка пицц
+            print(f'\t{pizza}: {my_dictionary[name][pizza]}')
 
 
 buyers = create_dictionary()

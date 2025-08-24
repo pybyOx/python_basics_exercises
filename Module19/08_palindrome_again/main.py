@@ -1,24 +1,13 @@
-def check_palindrome(string):
-    if string == string[::-1]:
-        return True
-    else:
-        return False
+from collections import Counter
 
 
-def check_possible(string):
-    count = 0
-    for symbol in set(string):
-        if string.count(symbol) % 2 != 0:
-            count += 1
-    if count > 1:
-        print('Нельзя сделать палиндромом')
-    else:
-        print('Можно сделать палиндромом')
+text = input("Введите строку: ")
 
+counts = Counter(text)
 
-text = input('Введите строку: ')
+odd_count = sum(1 for c in counts.values() if c % 2 != 0)
 
-if check_palindrome(text):
-    print('Строка является палиндромом!')
+if odd_count > 1:
+    print("Нельзя сделать палиндромом")
 else:
-    check_possible(text)
+    print("Можно сделать палиндромом")

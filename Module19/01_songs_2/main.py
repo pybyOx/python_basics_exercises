@@ -1,14 +1,3 @@
-def song_name_request(digit):
-    name_song = input('Название {}-ой песни: '.format(digit + 1))
-    return name_song
-
-
-def create_user_list():
-    count_of_songs = int(input('Сколько песен выбрать? '))
-    user_list = [song_name_request(count) for count in range(count_of_songs)]
-    return user_list
-
-
 violator_songs = {
     'World in My Eyes': 4.86,
     'Sweetest Perfection': 4.43,
@@ -21,6 +10,14 @@ violator_songs = {
     'Clean': 5.83
 }
 
-user_songs = create_user_list()
+total_time = 0
+for i in range(1, int(input('Сколько песен выбрать? ')) + 1):
+    while True:
+        song = input(f'Название {i}-ой песни: ')
+        duration = violator_songs.get(song)
+        if duration:
+            total_time += duration
+            break
+        print('Такой песни нет в списке. Попробуй еще раз.')
 
-print('Общее время звучания песен: {} минуты'.format(sum({violator_songs[song] for song in user_songs})))
+print(f'\nОбщее время звучания песен: {round(total_time, 2)} минуты')
