@@ -1,36 +1,5 @@
 import copy
 
-
-def output(dictionary):
-    for key, value in dictionary.items():
-        if isinstance(value, str):
-            print('    {}:{}'.format(key, value))
-        else:
-            print('{}:'.format(key))
-            output(value)
-
-
-def change_struct(my_struct, name):
-    for key, sub_struct in my_struct.items():
-        if isinstance(sub_struct, str):
-            new_value = sub_struct.replace('{}', name)
-            my_struct[key] = new_value
-            return my_struct
-        else:
-            my_struct[key] = change_struct(sub_struct, name)
-    return my_struct
-
-
-def create_new_struct(struct, count, result):
-    if count == 0:
-        return None
-    user_name = input('\nВведите название продукта для нового сайта: ')
-    new_struct = copy.deepcopy(struct)
-    result['Сайт для {}'.format(user_name)] = change_struct(new_struct, user_name)
-    output(result)
-    create_new_struct(struct, count - 1, result)
-
-
 site = {
         'html': {
             'head': {
@@ -45,6 +14,35 @@ site = {
     }
 
 
+def output(dictionary, indent=0):
+    for key, value in dictionary.items():
+        if isinstance(value, dict):
+            print(" " * indent + f"{key}:")
+            output(value, indent + 4)
+        else:
+            print(" " * indent + f"{key}: {value}")
+
+
+def change_struct(my_struct: dict, name: str):
+    for key, sub_struct in my_struct.items():
+        if isinstance(sub_struct, str):
+            my_struct[key] = sub_struct.replace('{}', name)
+        else:
+            change_struct(sub_struct, name)
+    return my_struct
+
+
+def create_new_struct(struct: dict, count: int):
+    result = {}
+    for _ in range(count):
+        prod_name = input('\nВведите название продукта для нового сайта: ')
+        new_struct = copy.deepcopy(struct)
+        result[f'Сайт для {prod_name}'] = change_struct(new_struct, prod_name)
+        for site_name, site_struct in result.items():
+            print(f"\n{site_name}:")
+            output(site_struct)
+    return result
+
+
 quantity = int(input('Сколько сайтов? '))
-sites = dict()
-create_new_struct(site, quantity, sites)
+sites = create_new_struct(site, quantity)
