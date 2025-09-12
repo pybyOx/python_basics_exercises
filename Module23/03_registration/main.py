@@ -1,47 +1,37 @@
 def read_info(file_name):
-    with open(file_name, 'r', encoding='utf-8') as my_file:
+    with (open(file_name, 'r', encoding='utf-8') as my_file,
+          open('registrations_good.log', 'w', encoding='utf-8') as good_file,
+          open('registrations_bad.log', 'w', encoding='utf-8') as bad_file):
+
         for line in my_file:
-            line = line.replace('\n', '')
+            line = line.strip()
             try:
-                error = check_info(line)
-                if error is None:
-                    with open('registrations_good.log', 'a', encoding='utf-8') as good_info:
-                        good_info.write(line + '\n')
-                else:
-                    with open('registrations_bad.log', 'a', encoding='utf-8') as bad_info:
-                        bad_info.write(line + '  -  ' + error + '\n')
-            except Exception as unknown_error:
-                print('Неизвестная ошибка:', unknown_error)
+                check_info(line)
+                good_file.write(line + '\n')
+            except Exception as error:
+                bad_file.write(line + '\t' + str(error) + '\n')
 
 
 def check_info(string):
-    try:
-        if len(string.split()) != 3:
-            raise IndexError('НЕ присутствуют все три поля')
+    if len(string.split()) != 3:
+        raise IndexError('НЕ присутствуют все три поля')
 
-        name, mail, age = string.split()
+    name, mail, age = string.split()
 
-        if not name.isalpha():
-            raise NameError('Поле «Имя» содержит НЕ только буквы')
-        if '@' not in mail or '.' not in mail:
-            raise SyntaxError('Поле «Имейл» НЕ содержит @ и/или точку')
-        age = int(age)
-        if not 10 <= age <= 99:
-            raise ValueError('Поле «Возраст» НЕ представляет число от 10 до 99')
-
-    except (IndexError, NameError, SyntaxError, ValueError) as error:
-        return str(error)
-        # print('{}:{}.'.format(error, exp))
-
-    return None
+    if not name.isalpha():
+        raise NameError('Поле «Имя» содержит НЕ только буквы')
+    if '@' not in mail or '.' not in mail:
+        raise SyntaxError('Поле «Имейл» НЕ содержит @ и/или точку')
+    if not age.isdigit() or not 10 <= int(age) <= 99:
+        raise ValueError('Поле «Возраст» НЕ представляет число от 10 до 99')
 
 
 def print_file(file_name):
     try:
         with open(file_name, 'r', encoding='utf-8') as my_file:
-            print('\nСодержимое файла {}:\n{}\n{}'.format(file_name, '_' * 40, my_file.read()))
+            print(f'\nСодержимое файла {file_name}:\n{'_' * 40}\n{my_file.read()}')
     except FileNotFoundError:
-        print('Файл {} не найден'.format(file_name))
+        print(f'Файл {file_name} не найден')
 
 
 read_info('registrations.txt')
