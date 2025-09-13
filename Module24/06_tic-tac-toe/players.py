@@ -1,17 +1,34 @@
 class Player:
-    def __init__(self, symbol):
-        self.name = input('Введите имя игрока: ')
+    """Класс, описывающий игрока.
+
+    Attributes:
+        name (str): Имя игрока.
+        wins (int): Количество побед игрока.
+        symbol (str): Символ, которым играет игрок ('X' или 'O').
+    """
+    def __init__(self, symbol: str):
+        """Создаёт игрока.
+
+        При создании запрашивает имя у пользователя.
+
+       Args:
+           symbol (str): Символ игрока ('X' или 'O').
+       """
+        self.name = input(f'Введите имя игрока ({symbol}): ')
         self.wins = 0
         self.symbol = symbol
-        self.moves = []
 
-    def move(self):
+    def move(self) -> int:
+        """Запрашивает у игрока номер клетки.
+
+        Returns:
+            int: Номер клетки, выбранной игроком (от 1 до 9).
+        """
         while True:
             try:
-                number = int(input(f'{self.name}, введите номер клетки: '))
-                if number in range(1, 10):
+                number = int(input(f'{self.name}, введите номер клетки (1-9): '))
+                if 1 <= number <= 9:
                     return number
-                else:
-                    print('Ошибка ввода: номер клетки должен находиться в диапазоне от 1 до 9.')
+                print('Ошибка ввода: введите число от 1 до 9.')
             except ValueError:
-                print('Ошибка ввода: необходимо ввести число.')
+                print('Ошибка ввода: нужно ввести число.')
