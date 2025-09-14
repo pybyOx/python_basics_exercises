@@ -8,11 +8,12 @@ def one_year_of_war():  # Функция запускает симуляцию �
     # Вы можете изменять состав команды, НО размер команды не должен быть более 5.
 
     tank = Tank("Танк Пётр")
-    attacker = Attacker("Убийца Ольга")
-    second_attacker = Attacker("Убийца Траур")
-    healer = Healer("Монах Игнат")
-    second_healer = Healer("Монах Ирэна")
-    good_team = [tank, attacker, second_attacker, second_healer, healer]
+    attacker1 = Attacker("Убийца Ольга")
+    attacker2 = Attacker("Убийца Траур")
+    healer1 = Healer("Монах Веня")
+    healer2 = Healer("Монах Игнат")
+
+    good_team = [tank, attacker1, attacker2, healer1, healer2]
 
     # Код ниже изменять нельзя!
 
