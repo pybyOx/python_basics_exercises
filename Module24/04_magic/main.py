@@ -1,5 +1,5 @@
 def print_result(elem_1, elem_2, reaction):
-    print('{} + {} = {}'.format(elem_1, elem_2, reaction))
+    print(f'{elem_1} + {elem_2} = {reaction}')
 
 
 class Pyro:

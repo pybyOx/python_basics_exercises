@@ -44,14 +44,18 @@ data = {
     ]
 }
 
+# 1. Списки ключей и значений
+print("Список ключей:", list(data.keys()))
+print("Список значений:", list(data.values()))
 
-print('Список ключей:', data.keys())
-print('Список значений:', data.values())
+# 2. Добавляем total_diff
+data.get["ETH"]["total_diff"] = 100
 
-data.get('ETH')['total_diff'] = 100
+# 3. Меняем name во fst_token_info
+data["tokens"][0]["fst_token_info"]["name"] = "doge"
 
-data.get('tokens')[0].get('fst_token_info')['name'] = 'doge'
+# 4. Удаляем total_out из токенов и суммируем в ETH
+data["ETH"]["total_out"] = data["tokens"][0].pop("total_out") + data["tokens"][1].pop("total_out")
 
-data.get('ETH')['total_out'] = data.get('tokens')[0].pop('total_out') + data.get('tokens')[1].pop('total_out')
-
-data.get('tokens')[1].get('sec_token_info')['total_price'] = data.get('tokens')[1].get('sec_token_info').pop('price')
+# 5. Меняем price → total_price в sec_token_info
+data["tokens"][1]["sec_token_info"]["total_price"] = data["tokens"][1]["sec_token_info"].pop("price")

@@ -2,8 +2,7 @@ import random
 
 
 def create_team():
-    team = [round(random.uniform(5, 10), 2) for _ in range(20)]
-    return team
+    return [round(random.uniform(5, 10), 2) for _ in range(20)]
 
 
 first_team = create_team()

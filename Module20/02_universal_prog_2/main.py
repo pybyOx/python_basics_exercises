@@ -7,8 +7,8 @@ def is_prime(number):
     return True
 
 
-def find_simple_index(iterable):
+def crypto(iterable):
     return [value for index, value in enumerate(iterable) if is_prime(index)]
 
 
-print(find_simple_index('О Дивный Новый мир!'))
+print(crypto('О Дивный Новый мир!'))

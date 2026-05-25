@@ -1,16 +1,21 @@
+alphabet = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+length = len(alphabet)
+
+
+def new_index(old_index: int, shift: int) -> int:
+    return (old_index + shift) % length
+
+
 def encryption(text, shift):
+    new_text = ''
+    for symbol in text:
+        if symbol.lower() in alphabet:
+            new_char = alphabet[new_index(alphabet.index(symbol.lower()), shift)]
+            new_text += new_char if symbol.islower() else new_char.upper()
+        else:
+            new_text += symbol
+    return new_text
 
-    alphabet = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 
-    text = [alphabet[alphabet.index(symbol) - len(alphabet) + shift]
-            if symbol in alphabet
-            else ' '
-            for symbol in text]
-
-    return ''.join(text)
-
-
-my_text = input('Введите сообщение: ')
-my_shift = int(input('Введите сдвиг: '))
-
-print('Зашифрованное сообщение:', encryption(my_text, my_shift))
+print('Зашифрованное сообщение:', encryption(text=input('Введите сообщение: '),
+                                             shift=int(input('Введите сдвиг: '))))

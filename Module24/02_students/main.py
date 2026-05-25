@@ -15,7 +15,7 @@ class Student:
 def create_students():
     students_list = []
     for number in range(1, 11):
-        print('\nСтудент {}:'.format(number))
+        print(f'\nСтудент {number}:')
         name = input('Фамилия Имя: ')
         group = randint(1, 5)
         grades = [randint(1, 5) for _ in range(5)]
@@ -29,8 +29,10 @@ def sort_students(students_list):
 
 def print_students(students_list):
     for student in students_list:
-        print('\nФИ: {}\nНомер группы: {}\nОценки: {}\nСредний балл: {}'.format(
-            student.name, student.group, student.grades, student.average_grade()))
+        print(f'\nФИ: {student.name}'
+              f'\nНомер группы: {student.group}'
+              f'\nОценки: {student.grades}'
+              f'\nСредний балл: {student.average_grade()}')
 
 
 students = create_students()

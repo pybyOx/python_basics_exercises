@@ -3,8 +3,7 @@ import math
 
 def get_sage_sqrt(digit):
     try:
-        result = math.sqrt(digit)
-        return result
+        return math.sqrt(digit)
     except ValueError:
         print('Нельзя взять корень отрицательного значения.')
     except TypeError:

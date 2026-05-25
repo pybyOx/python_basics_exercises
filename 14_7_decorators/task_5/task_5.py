@@ -1,7 +1,3 @@
-# Реализуйте декоратор counter, считающий и выводящий количество вызовов декорируемой функции.
-
-# Для решения задачи нельзя использовать операторы global и nonlocal (об этом мы ещё расскажем).
-
 from functools import wraps
 from _collections_abc import Callable
 

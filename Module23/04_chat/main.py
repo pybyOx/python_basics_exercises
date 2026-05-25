@@ -2,28 +2,25 @@ def user_request():
     while True:
         user_name = input('\nВведите имя пользователя: ').title()
         while True:
-            print('\nЗдравствуйте, {}!'
-                  '\nВыберите действие:'
-                  '\n    1.Посмотреть текущий текст чата.'
-                  '\n    2.Отправить сообщение.'
-                  '\n    3.Сменить пользователя.'
-                  '\n  (Введите < 1 >, < 2 > или < 3 > )'.format(user_name))
+            print(f'\n{user_name}, выберите действие:'
+                  f'\n    1.Посмотреть текущий текст чата.'
+                  f'\n    2.Отправить сообщение.'
+                  f'\n    3.Сменить пользователя.'
+                  f'\n  (Введите < 1 >, < 2 > или < 3 > )')
             try:
                 user_selection = int(input())
+
+                if user_selection == 1:
+                    read_chat()
+                elif user_selection == 2:
+                    write_text(user_name)
+                elif user_selection == 3:
+                    break
+                else:
+                    raise ValueError
+
             except ValueError:
                 print('Ошибка ввода: необходимо ввести < 1 >, < 2 > или < 3 > .')
-            else:
-                try:
-                    if user_selection == 1:
-                        read_chat()
-                    elif user_selection == 2:
-                        write_text(user_name)
-                    elif user_selection == 3:
-                        break
-                    else:
-                        raise ValueError('Ошибка ввода: введено значение, отличное от 1, 2 или 3.')
-                except ValueError as error:
-                    print(error)
 
 
 def read_chat():

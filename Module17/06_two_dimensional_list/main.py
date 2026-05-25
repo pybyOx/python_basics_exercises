@@ -1,5 +1,2 @@
-my_list = [number for number in range(1, 13)]
 
-my_list = [my_list[index::4] for index in range(4)]
-
-print(my_list)
+print([[i + 4*j for j in range(3)] for i in range(1, 5)])

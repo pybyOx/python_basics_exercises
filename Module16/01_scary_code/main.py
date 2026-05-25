@@ -17,6 +17,3 @@ main_list.extend(second_list)
 print('Кол-во цифр 3 при втором объединении:', main_list.count(3))
 
 print('Итоговый список:', main_list)
-
-
-# TODO переписать программу

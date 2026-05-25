@@ -1,25 +1,19 @@
-def create_dictionary():
-    count_pair = int(input('Введите количество пар слов: '))
-    dictionary_pair = dict()
-    for digit in range(count_pair):
-        print('{}-я пара:'.format(digit + 1))
-        first_word, second_word = input('Слово: ').title(), input('Cиноним: ').title()
-        dictionary_pair[first_word] = second_word
-        dictionary_pair[second_word] = first_word
-
-    return dictionary_pair
-
-
-def check_dictionary(dictionary):
+synonyms = {}
+for i in range(int(input('Введите количество пар слов: '))):
     while True:
-        user_word = input('\nВведите слово: ').title()
-        if user_word in dictionary.keys():
-            print('Синоним: {}'.format(dictionary.get(user_word)))
+        words = input(f'{i+1}-я пара: ')
+        pair = [word.strip().lower() for word in words.split() if word.isalpha()]
+        if len(pair) == 2:
+            word1, word2 = pair[0], pair[1]
+            synonyms[word1], synonyms[word2] = word2, word1
             break
-        else:
-            print('Такого слова в словаре нет.')
+        print('Некорректный ввод. \nВведите два слова-синонима')
 
-
-pair_dictionary = create_dictionary()
-
-check_dictionary(pair_dictionary)
+# поиск синонимов
+while True:
+    user_word = input('\nВведите слово: ').strip().lower()
+    if user_word in synonyms:
+        print(f'Синоним: {synonyms[user_word].title()}')
+        break
+    else:
+        print('Такого слова в словаре нет.')

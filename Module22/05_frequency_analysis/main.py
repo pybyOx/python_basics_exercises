@@ -1,29 +1,25 @@
-def create_analysis_dictionary(alphabet='abcdefghijklmnopqrstuvwxyz'):
-    analysis = dict()
-
-    text_file = open('text.txt', 'r')
-    symbols_list = [symbol for symbol in text_file.read().lower() if symbol in alphabet]
-    text_file.close
-
-    for symbol in set(symbols_list):
-        analysis[symbol] = round(symbols_list.count(symbol) / len(symbols_list), 3)
-
-    return dict(sorted(analysis.items(), key=lambda item: (-item[1], item[0])))
-
-
-def write_result(dictionary):
-    analysis_file = open('analysis.txt', 'w')
-    for symbol, fraction in dictionary.items():
-        analysis_file.write('{} {}\n'.format(symbol, fraction))
-    analysis_file.close()
+from collections import Counter
 
 
 def read_file(file_name):
-    my_file = open(file_name, 'r')
-    print('\nСодержимое файла {}:\n{}'.format(file_name, my_file.read()))
-    my_file.close()
+    with open(file_name, 'r', encoding='utf-8') as f:
+        print(f"\nСодержимое файла {file_name}:\n{f.read()}")
 
 
-write_result(create_analysis_dictionary())
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+with open('text.txt', 'r', encoding='utf-8') as f:
+    text = f.read().lower()
+
+letters = [char for char in text if char in alphabet]
+
+winners = sorted(((char, cnt/len(letters)) for char, cnt in Counter(letters).items()),
+                 key=lambda x: (-x[1], x[0]))  # сортировка: сначала по убыванию доли, потом по алфавиту
+
+with open('analysis.txt', 'w', encoding='utf-8') as f:
+    f.writelines(f"{char} {part:.3f}\n"
+                 for char, part in winners)
+
+
 read_file('text.txt')
 read_file('analysis.txt')

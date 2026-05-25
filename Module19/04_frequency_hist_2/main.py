@@ -1,33 +1,24 @@
-def output_dictionary(dictionary):
-    for keys in sorted(dictionary.keys()):
-        print('{}:{}'.format(keys, dictionary[keys]))
-
-
-def invert_dictionary(dictionary):
-    invert_dict = dict()
-    for number in range(1, max(dictionary.values()) + 1):
-        invert_dict[number] = [symbol for symbol in dictionary.keys() if dictionary[symbol] == number]
-    return invert_dict
-
-
-def histogram(string):
-    symbols = dict()
-    for symbol in string:
-        if symbol in symbols:
-            symbols[symbol] += 1
-        else:
-            symbols[symbol] = 1
-    return symbols
+def output_dictionary(my_dict):
+    for key in sorted(my_dict.keys()):
+        print(f'{key}:{my_dict[key]}')
 
 
 text = input('Введите текст: ').lower()
 
-frequency_dictionary = histogram(text)
+dictionary = {symbol: text.count(symbol) for symbol in set(text)}
 
-invert_frequency_dictionary = invert_dictionary(frequency_dictionary)
+# from collections import Counter
+# dictionary = Counter(text)
+
+invert_dictionary = {number: [symbol for symbol in dictionary.keys() if dictionary[symbol] == number]
+                     for number in range(1, max(dictionary.values()) + 1)}
+
+# invert_dictionary = {}
+# for symbol, count in dictionary.items():
+#     invert_dictionary.setdefault(count, []).append(symbol)
 
 print('\nОригинальный словарь частот:')
-output_dictionary(frequency_dictionary)
+output_dictionary(dictionary)
 
 print('\nИнвертированный словарь частот:')
-output_dictionary(invert_frequency_dictionary)
+output_dictionary(invert_dictionary)

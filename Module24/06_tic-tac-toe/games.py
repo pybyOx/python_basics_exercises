@@ -1,60 +1,72 @@
-from random import choice
 from boards import Board
+from players import Player
 
 
 class Game:
-    def __init__(self, player_1, player_2):
+    """Класс, управляющий ходом игры.
+
+    Attributes:
+        gamers (list[Player]): Список игроков.
+        board (Board): Игровое поле.
+    """
+    def __init__(self, player_1: Player, player_2: Player):
+        """Создаёт игру.
+
+        Args:
+            player_1 (Player): Первый игрок.
+            player_2 (Player): Второй игрок.
+        """
         self.gamers = [player_1, player_2]
         self.board = Board()
 
-    def main_menu(self, continue_game=''):
+    def main_menu(self):
+        """Запускает основной цикл игры.
 
-        while continue_game != 'нет':
+        В цикле последовательно запускаются игры.
+        После каждой выводится текущий счёт.
+        Игрокам предлагается продолжить или завершить.
+        """
+        continue_game = 'да'
 
-            first_mover = choice(self.gamers)
-            other = self.gamers[1 - self.gamers.index(first_mover)]
-            print('\nПервый ход делает {}.'.format(first_mover.name))
+        while continue_game == 'да':
+            self.one_game()
 
-            if self.one_game(first_mover, other):
-
-                print('\nТекущий счет:\n{}: {}\n{}: {}'.format(
-                    self.gamers[0].name, self.gamers[0].wins,
-                    self.gamers[1].name, self.gamers[1].wins))
+            print('\nТекущий счет:')
+            for gamer in self.gamers:
+                print(f'{gamer.name}: {gamer.wins}')
 
             while True:
-                continue_game = input('\nХотите начать новую игру? ').lower()
+                continue_game = input('\nХотите начать новую игру? (да/нет): ').lower()
                 if continue_game in ['да', 'нет']:
                     break
-                else:
-                    print('Ошибка ввода: нужно ответить "да" или "нет"')
 
-    def one_game(self, player_1, player_2):
+                print('Ошибка ввода: нужно ответить "да" или "нет".')
 
+    def one_game(self):
+        """Запускает одну игру.
+
+        Игроки поочерёдно делают ходы.
+        После каждого хода поле отображается в консоли.
+        Победитель определяется при достижении выигрышной комбинации.
+
+        """
         self.board.reset()
-        player_1.moves.clear()
-        player_2.moves.clear()
+        players = self.gamers
 
-        for player in [player_1, player_2] * 4 + [player_1]:
-            if self.make_move(player):
-                print('Победил/а {}!'.format(player.name))
-                player.wins += 1
-                return True
+        for turn in range(9):
+            current_player = players[turn % 2]
+            print(f"\nХодит {current_player.name}...")
+            while True:
+                number = current_player.move()
+                if self.board.change_cell(number, current_player.symbol):
+                    break
+                print("Клетка занята, попробуйте снова.")
 
-        print('\nНичья!')
-        return False
+            self.board.display()
 
-    def make_move(self, player):
-        while True:
-            print('\nХодит {}...'.format(player.name))
-            number = player.move()
+            if self.board.check_game_over(current_player.symbol):
+                print(f"Победил {current_player.name}!")
+                current_player.wins += 1
+                return
 
-            if self.board.change_cell(number, player.symbol):
-                print('{} походил/а  на клетку {}'.format(player.name, number))
-                player.moves.append(number)
-                if self.board.check_game_over(player.moves):
-                    return True
-                else:
-                    return False
-
-            else:
-                print('Не получилось сделать ход. Клетка уже занята')
+        print('Ничья!')

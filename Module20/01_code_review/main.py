@@ -1,8 +1,3 @@
-def create_list_and_calculation_length(dictionary):
-    return (list({interest for value in dictionary.values() for interest in value['interests']}),
-            sum([len(dictionary[key]['surname']) for key in dictionary]))
-
-
 students = {
     1: {
         'name': 'Bob',
@@ -25,9 +20,12 @@ students = {
 }
 
 
-print('Список пар «ID студента — возраст»:', [(index, value['age']) for index, value in students.items()])
+print('Список пар «ID студента — возраст»:',
+      [(index, value['age']) for index, value in students.items()])
 
-interests_list, total_surname = create_list_and_calculation_length(students)
+print('Полный список интересов всех студентов:',
+      list({interest for value in students.values() for interest in value['interests']}))
 
-print('Полный список интересов всех студентов:', interests_list)
-print('Общая длина всех фамилий студентов:', total_surname)
+print('Общая длина всех фамилий студентов:',
+      sum([len(students[id_s]['surname']) for id_s in students]))
+

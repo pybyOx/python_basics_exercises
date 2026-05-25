@@ -1,17 +1,48 @@
 import operator
+from collections import Callable
 
 
 class Matrix:
-    def __init__(self, lines, columns):
+    """Класс для работы с матрицами.
+
+    Поддерживает базовые операции над матрицами:
+    сложение, вычитание, умножение и транспонирование.
+
+    Attributes:
+        lines (int): Количество строк в матрице
+        columns (int): Количество столбцов в матрице
+        data (list[list[int]]): Двумерный список (матрица),
+            содержащий элементы (по умолчанию заполняется нулями).
+    """
+    def __init__(self, lines: int, columns: int):
+        """Инициализация матрицы заданного размера.
+
+        Args:
+            lines (int): Количество строк.
+            columns (int): Количество столбцов.
+        """
         self.lines = lines
         self.columns = columns
         self.data = [[0 for _ in range(self.columns)] for _ in range(self.lines)]
 
-    def output(self):
+    def output(self) -> None:
         for line in self.data:
             print('{:<5}'.format(' '.join(map(str, line))))
 
-    def calculation(self, other, operation):
+    def calculation(self, other: "Matrix", operation: Callable) -> "Matrix":
+        """Выполняет поэлементную операцию над двумя матрицами одинакового размера.
+
+        Args:
+            other (Matrix): Вторая матрица
+            operation (Callable): Функция для операции над элементами
+                (например, operator.add или operator.sub).
+
+        Returns:
+            Matrix: Результирующая матрица после применения операции.
+
+        Raises:
+            ValueError: Если размеры матриц не совпадают.
+        """
         if self.lines != other.lines or self.columns != other.columns:
             raise ValueError('Размеры матриц не совпадают.')
 
@@ -21,7 +52,19 @@ class Matrix:
                 result.data[i][j] = operation(self.data[i][j], other.data[i][j])
         return result
 
-    def multiply(self, other):
+    def multiply(self, other: "Matrix") -> "Matrix":
+        """Умножает матрицу на другую матрицу.
+
+        Args:
+            other (Matrix): Вторая матрица (число столбцов первой матрицы
+                должно совпадать с числом строк второй).
+
+        Returns:
+            Matrix: Результат умножения матриц.
+
+        Raises:
+            ValueError: Если размеры матриц несовместимы для умножения.
+        """
         if self.columns != other.lines:
             raise ValueError('Количество столбцов в первой матрице должно совпадать с количеством строк во второй.')
 
@@ -32,7 +75,12 @@ class Matrix:
                     result.data[i][j] += self.data[i][k] * other.data[k][j]
         return result
 
-    def transpose(self):
+    def transpose(self) -> "Matrix":
+        """Возвращает транспонированную матрицу.
+
+        Returns:
+            Matrix: Новая матрица, являющаяся транспонированной версией исходной.
+        """
         result = Matrix(self.columns, self.lines)
         for i in range(self.lines):
             for j in range(self.columns):
